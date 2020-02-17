@@ -49,15 +49,15 @@ c = [
 r = [
     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '', '', '', '', '', '', '', '7b', 'b7', '71'],
-    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+    ['', '', '', '', '', '', '', 'd9', 'e4', 'ea', '38', '1e', '15', '7b', 'b7', '71'], # '15', '7b', 'b7', '71'
+    ['', '', '', '', '', '', '', 'd0', 'ec', 'ed', '3e', '1b', '11', '78', 'b5', '70']
 ]
 
 m = [
     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '', '', '', '', '', '', '', '78', 'b5', '70']
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']  # '11', '78', 'b5', '70'
 ]
 
 # print("".join(["".join(blk) for blk in blocks]))
@@ -146,39 +146,81 @@ plaintext = [
 #
 #     c[i - 1][n] = original
 
-n = 13
+# n = 12
+# i = 3
+#
+# a = xor(c[i-1][n+1], r[i-1][n+1])
+# b = str(15 - n + 1)
+# c[i-1][n+1] = xor(a, b)
+#
+# a = xor(c[i-1][n+2], r[i-1][n+2])
+# b = str(15 - n + 1)
+# c[i-1][n+2] = xor(a, b)
+#
+# a = xor(c[i-1][n+3], r[i-1][n+3])
+# b = str(15 - n + 1)
+# c[i-1][n+3] = xor(a, b)
+#
+# # print(c)
+#
+# for rr in range(256):
+#     print(rr)
+#     original = c[i - 1][n]
+#
+#     a = xor(c[i - 1][n], hex_of(rr))
+#     b = xor(a, str(15 - n + 1))
+#     c[i-1][n] = b
+#
+#     if isTrue(c):
+#         r[i - 1][n] = hex_of(rr)
+#         m[i][n] = xor(r[i - 1][n], str(15 - n + 1))
+#         break
+#
+#     c[i-1][n] = original
+
+
 i = 3
+for n in range(15, -1, -1):
+# for n in range(13, 11, -1):
+    found = False
+    c_original = deepcopy(c)
 
-a = xor(c[i-1][n+1], r[i-1][n+1])
-b = str(15 - n + 1)
-c[i-1][n+1] = xor(a, b)
+    for k in range(n, 15):
+        a = xor(c[i-1][k+1], r[i - 1][k+1])
+        b = str(15 - n + 1)
+        c[i - 1][k+1] = xor(a, b)
 
-a = xor(c[i-1][n+2], r[i-1][n+2])
-b = str(15 - n + 1)
-c[i-1][n+2] = xor(a, b)
+    print('\nc')
+    print(c)
 
-# print(c)
+    for rr in range(256):
+        found = False
+        print(rr)
+        original = c[i-1][n]
 
-for rr in range(256):
-    print(rr)
-    original = c[i - 1][n]
+        a = xor(c[i-1][n], hex_of(rr))
+        b = xor(a, str(15 - n + 1))
+        c[i-1][n] = b
 
-    a = xor(c[i - 1][n], hex_of(rr))
-    b = xor(a, str(15 - n + 1))
-    c[i - 1][n] = b
+        if isTrue(c):
+            r[i - 1][n] = hex_of(rr)
+            m[i][n] = xor(r[i-1][n], str(15 - n + 1))
+            found = True
+            break
 
-    if isTrue(c):
-        r[i - 1][n] = hex_of(rr)
-        m[i][n] = xor(r[i - 1][n], str(15 - n + 1))
+        c[i-1][n] = original
+
+    if not found:
+        print('\n\nElement with n = %s wasn\'t found in all 256 iterations:(' % n)
         break
 
-    c[i - 1][n] = original
+    c = c_original
 
-print('\nr')
-print(r)
+    print('\nr')
+    print(r)
 
-print('\nm')
-print(m)
+    print('\nm')
+    print(m)
 
 
 
